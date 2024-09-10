@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 开始实现导入静态文件资源 -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'jquery_3.6.0.js' %}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 class="text-center">欢迎来到注册页面</h1>
+            <!-- 开始实现我们的使用自定义组件 -->
+            <form action="" id="myform">
+                {% csrf_token %}
+                <!-- 开始实现通过循环来实现渲染自定义的form组件 -->
+                {% for form in form_obj %}
+                    <!-- 开始渲染页面 -->
+                    <div class="form-group">
+                        <label for="">{{ form.label }}</label>{{ form }}
+                        <span style="color:red">{{ form.errors.0 }}</span>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <!-- 开始让我们的用户自己来选择头像信息 -->
+                    <label for="myfile">头像&nbsp;<img src="{% static 'images/default.png' %}" alt=""></label>
+                    <input type="file" id="myfile" name="avatar" style="display: none"/>
+                </div>
+                <!-- 开始像后端提交数据 -->
+                <input type="button" class="btn btn-primary pull-right" value="注册" id="id_commit">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
