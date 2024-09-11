@@ -49,7 +49,7 @@ class MyRegisterForm(forms.Form):
         return username
 
     # 全局钩子: 判断用户输入的两次密码是否一致
-    def clean_confirmPassword(self):
+    def clean(self):
         password = self.cleaned_data.get('password')
         confirmPassword = self.cleaned_data.get('confirmPassword')
         if not password == confirmPassword:
