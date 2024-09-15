@@ -53,18 +53,6 @@ def Login(request):
 
 # 使用我们的pillow来实现操作我们的图片
 # 书写获取验证码的视图函数
-"""
-from PIL import Image, ImageDraw, ImageFont
-image  就是实现的是我们的生成图片
-ImageDraw 就是在图片上面实现可以画图
-ImageFont 实现的就是我们的在图片上实现书写我们的字体
-
-实现的图片的保存放置于我们的内存中，不需要我们的占用内置的空间
-from io import BytesIO, StringIO
-ByteIO 实现的是临时存储数据,返回的是我们的二进制格式
-StringIO 实现的是临时存储数据,返回的是我们的字符串格式
-
-"""
 
 
 def get_code(request):
