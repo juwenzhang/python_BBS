@@ -24,5 +24,7 @@ urlpatterns = [
     # 开始配置登录
     path('login/', views.Login),
     # 开始是西安我们的验证码的操作
-    path('get_code/', views.get_code)
+    path('get_code/', views.get_code),
+    # 主页的页面
+    path('hoem/', views.home)
 ]

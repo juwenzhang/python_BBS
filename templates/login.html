@@ -17,9 +17,11 @@
             <div class="form-group">
                 <label for="username">用户名</label><input type="text" class="form-control" id="username">
             </div>
+            <span></span>
             <div class="form-group">
                 <label for="password">密码</label><input type="password" class="form-control" id="password">
             </div>
+            <span></span>
             <div class="form-group">
                 <label for="code">验证码</label>
                 <div class="row">
@@ -28,13 +30,57 @@
                     </div>
                     <div class="col-md-3">
                         <!-- 开始通过我们的图片来实现呈现我们的验证码 -->
-                        <img src="/get_code/" alt="网络不佳，请检查网络后重试" height="40px" width="200px">
+                        <img src="/get_code/" alt="网络不佳，请检查网络后重试" height="40px" width="200px" id="id_img">
                     </div>
+                    <span></span>
                 </div>
             </div>
             <input type="button" class="btn btn-success form-control" value="登录" id="id_commit">
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div>
+                <span id="error_message" style="color: red"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 给我们的图片一个点击事件
+        $("#id_img").on("click", function() {
+            // 只要我们向我们的路径后面添加一个 ? 就可以实现我们的刷新请求页面
+            let oldVal = $("#id_img").attr("src");
+            $(this).attr("src", oldVal+"?");
+        })
+
+        // 开始实现我们的通过ajax向我们的后端发送数据
+        $("#id_commit").click(function(){
+            $.ajax({
+                url:`/login/`,
+                method:"POST",
+                type:"POST",
+                data:{
+                    'username': $("#username").val(),
+                    'password': $("#password").val(),
+                    'code': $("#code").val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                contentType:false,
+                processData:false,
+                // 开始设置我们的请求成功的响应函数
+                success:function(response){
+                    if (response.code === 200){
+                        window.location.href = response.url;
+                    }else{
+                        // 开始实现渲染我们的报错信息
+                        $("#error_message").text(response.message);
+                        // $("#error_message").addClass("has-error")
+                    }
+                }
+            })
+        })
+    </script>
 </div>
 </body>
 </html>
