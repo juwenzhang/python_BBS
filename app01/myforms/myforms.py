@@ -25,7 +25,9 @@ class MyRegisterForm(forms.Form):
 
     confirmPassword = forms.CharField(label="确认密码", max_length=20, min_length=8, required=True,
                                       error_messages={
-                                          'required': "不可为空"
+                                          'required': "不可为空",
+                                          'min_length': "密码最少八位",
+                                          'max_length': "密码最多二十位"
                                       },
                                       widget=forms.PasswordInput(attrs={"class": "form-control"})
                                       )
@@ -50,8 +52,9 @@ class MyRegisterForm(forms.Form):
 
     # 全局钩子: 判断用户输入的两次密码是否一致
     def clean(self):
+        cleaned_data = super(MyRegisterForm, self).clean()
         password = self.cleaned_data.get('password')
         confirmPassword = self.cleaned_data.get('confirmPassword')
         if not password == confirmPassword:
             self.add_error('confirmPassword', "两次密码不一致")
-        return confirmPassword
+        return cleaned_data

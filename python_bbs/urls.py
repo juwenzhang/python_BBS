@@ -20,5 +20,7 @@ from app01 import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     #  实现注册功能
-    path('register/', views.Register)
+    path('register/', views.Register),
+    # 开始配置登录
+    path('login/', views.Login)
 ]

@@ -6,14 +6,14 @@
     <!-- 开始实现导入静态文件资源 -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'jquery_3.6.0.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h1 class="text-center">欢迎来到注册页面</h1>
+            <h1 class="text-center">注册页面</h1>
             <!-- 开始实现我们的使用自定义组件 -->
             <form action="" id="myform">
                 {% csrf_token %}
@@ -21,13 +21,17 @@
                 {% for form in form_obj %}
                     <!-- 开始渲染页面 -->
                     <div class="form-group">
-                        <label for="">{{ form.label }}</label>{{ form }}
+                        <label for="{{form.auto_id}}">{{ form.label }}</label>{{ form }}
                         <span style="color:red">{{ form.errors.0 }}</span>
                     </div>
                 {% endfor %}
                 <div class="form-group">
                     <!-- 开始让我们的用户自己来选择头像信息 -->
-                    <label for="myfile">头像&nbsp;<img src="{% static 'images/default.png' %}" alt=""></label>
+                    <label for="myfile">
+                        头像
+                        <br>
+                        <img id="register_img" src="{% static 'images/default.png' %}" alt="" width="100px">
+                    </label>
                     <input type="file" id="myfile" name="avatar" style="display: none"/>
                 </div>
                 <!-- 开始像后端提交数据 -->
@@ -36,5 +40,81 @@
         </div>
     </div>
 </div>
+
+<!--开始通过我们的js来实现更新我们的图片文件的样式-->
+<script>
+    // 开始实现我通过我们的jquery来实现我们的操作我们的页面
+    // 使用change时间来实现的是我们的随时跟随着图片的路径来实现我们的页面的呈现效果的变化
+    $("#myfile").change(function(){
+        // 开始实现读取图片
+        /*
+        * 实现步骤:
+        * 1.先实现实例化一个文件阅读器对象
+        * 2.实现获取我们的上传的文件
+        * 3.读取我们的上传的文件的信息
+        * 4.修改我们的呈现的图片的路径的修改
+        *
+        * 但是我们实现的时候不能够只通过我们的这样的步骤来实现运行，我们还需要实现的是我们的
+        * 通过我们的另一个方式来实现操作
+        * 需要等待文件阅读器加载完毕，才实现后面的操作（将我们的图片加载给页面）
+        * */
+        let fileRead = new FileReader()
+        let user_file = $(this)[0].files[0]
+        fileRead.readAsDataURL(user_file)
+        fileRead.onload = function(){
+            // console.log(fileRead.result)
+            $("#register_img").attr("src", fileRead.result)
+        }
+    })
+
+    // 开始通过我们的ajax实现提交数据
+    /*
+    * 开始通过ajax来实现我们的前后端的数据的交互
+    * 1.使用FormData 来实现我们的数据的发送
+    * 2.然后实现编辑传送给后端的数据的键值对实现拼接数据
+    * */
+    $("#id_commit").click(function(){
+        let formDataObj = new FormData();
+        // index 是索引值， obj是循环的对象
+        $.each($("#myform").serializeArray(), function(index, obj){
+            formDataObj.append(obj.name, obj.value)
+        })
+        // 添加文件数据
+        formDataObj.append("avatar", $("#myfile")[0].files[0])
+        // 开始发送ajax请求
+        $.ajax({
+            url:"",
+            method:"POST",
+            type:"POST",
+            data:formDataObj,
+            contentType:false,
+            processData:false,
+            success:function(response){
+                if (response.code === 200){
+                    // 就是我们注册成功的时候的情况,就直接跳转登录页面
+                    window.location.href = response.url;
+                }else{
+                    // 报错信息的实现
+                    $.each(response.message, function(index, obj){
+                        // console.log(index, obj)
+                        // 开始实现拼接报错信息
+                        console.log(index)
+                        // 因为我们的django的内置的自定义form组件实惠自动添加一个 id_字段名的id值得
+                        let target_id = "#id_" + index
+                        // console.log(target_id)
+                        // 获取我们的报错的input标签,然后实现获取到下一个的元素节点，随后渲染他们的文本节点
+                        $(target_id).next().text(obj[0]).parent().addClass("has-error")
+                    })
+                }
+            }
+        })
+    })
+
+    // 开始实现取消点击后得显示信息
+    // 给所有的input框来获取我们的焦点事件
+    $("input").focus(function(){
+        $(this).next().text("").parent().removeClass("has-error")
+    })
+</script>
 </body>
 </html>
