@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script src="{% static 'jquery_3.6.0.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<!--用来实现的是我们的登录页面的排版设置-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 class="text-center">登录页面</h1>
+            <div class="form-group">
+                <label for="username">用户名</label><input type="text" class="form-control" id="username">
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label><input type="password" class="form-control" id="password">
+            </div>
+            <div class="form-group">
+                <label for="code">验证码</label>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="code">
+                    </div>
+                    <div class="col-md-3">
+                        <!-- 开始通过我们的图片来实现呈现我们的验证码 -->
+                        <img src="/get_code/" alt="网络不佳，请检查网络后重试" height="40px" width="200px">
+                    </div>
+                </div>
+            </div>
+            <input type="button" class="btn btn-success form-control" value="登录" id="id_commit">
+        </div>
+    </div>
+</div>
+</body>
+</html>

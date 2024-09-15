@@ -35,7 +35,7 @@
                     <input type="file" id="myfile" name="avatar" style="display: none"/>
                 </div>
                 <!-- 开始像后端提交数据 -->
-                <input type="button" class="btn btn-primary pull-right" value="注册" id="id_commit">
+                <input type="button" class="btn btn-primary form-control" value="注册" id="id_commit">
             </form>
         </div>
     </div>
@@ -83,7 +83,7 @@
         formDataObj.append("avatar", $("#myfile")[0].files[0])
         // 开始发送ajax请求
         $.ajax({
-            url:"",
+            url:"/register/",
             method:"POST",
             type:"POST",
             data:formDataObj,
@@ -98,7 +98,7 @@
                     $.each(response.message, function(index, obj){
                         // console.log(index, obj)
                         // 开始实现拼接报错信息
-                        console.log(index)
+                        // console.log(index)
                         // 因为我们的django的内置的自定义form组件实惠自动添加一个 id_字段名的id值得
                         let target_id = "#id_" + index
                         // console.log(target_id)

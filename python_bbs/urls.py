@@ -22,5 +22,7 @@ urlpatterns = [
     #  实现注册功能
     path('register/', views.Register),
     # 开始配置登录
-    path('login/', views.Login)
+    path('login/', views.Login),
+    # 开始是西安我们的验证码的操作
+    path('get_code/', views.get_code)
 ]
