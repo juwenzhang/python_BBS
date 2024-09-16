@@ -48,13 +48,45 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                    aria-haspopup="true" aria-expanded="false">更多操作 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">修改密码</a></li>
+                  <li><a href="" data-toggle="modal" data-target=".bs-example-modal-lg">修改密码</a></li>
                   <li><a href="#">修改头像</a></li>
                   <li><a href="#">后台管理</a></li>
                   <li role="separator" class="divider"></li>
                   <li><a href="#">退出登录</a></li>
                 </ul>
            </li>
+           <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+               <div class="modal-dialog modal-lg" role="document">
+                   <div class="modal-content">
+                       <h1 class="text-center">修改密码</h1>
+                       <div class="row">
+                           <div class="col-md-8 col-md-offset-2">
+                               <div class="form-group">
+                                   <label for="id_home_username">用户名</label>
+                                   <input class="form-control" type="text" id="id_home_username" value="{{ request.user.username }}" disabled name="id_home_username">
+                               </div>
+                               <div class="form-group">
+                                   <label for="old_password">原密码</label>
+                                   <input class="form-control" type="password" id="old_password" name="old_password">
+                               </div>
+                               <div class="form-group">
+                                   <label for="new_password">新密码</label>
+                                   <input class="form-control" type="password" id="new_username" name="new_password">
+                               </div>
+                               <div class="form-group">
+                                   <label for="confirm_password">确认密码</label>
+                                   <input class="form-control" type="password" id="confirm_username" name="confirm_password">
+                               </div>
+                               <div class="modal-footer">
+                                   <input id="none_edit" type="button" class="btn btn-danger" data-dismiss="modal" value="放弃修改"/>
+                                   <input type="button" id="confirm_edit" class="btn btn-success" value="确认修改"/><br>
+                                   <span id="err_message" style="color:red"></span>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+            </div>
         <!-- 开始实现设置我们的位处于登录情况下的展示到页面的玩意 -->
         {% else %}}
           <li><a href="/login/">登录</a></li>
@@ -65,5 +97,38 @@
   </div>
 </nav>
 
+<!--开始实现书写我们的js的思维逻辑-->
+<script>
+
+    $("#confirm_edit").on("click", function() {
+        // 开始发送ajax请求
+        $.ajax({
+            url: "/set_password/",
+            method:"POST",
+            type:"POST",
+            contentType:false,
+            processData:false,
+            data:{
+                // 设置我们传递给后端的数据
+                'old_password': $("#old_password").val(),
+                'new_password': $("#new_password").val(),
+                'confirm_password': $("#confirm_password").val(),
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            // 开始实现设置请求成功的回调函数
+            success:function(response){
+                if (response.code === 200){
+                    window.location.reload()
+                }else{
+                    $("#err_message").text(response.message);
+                }
+            },
+            // 开始实现设置我们的请求失败的回调函数
+            error:function(){
+                $("#err_message").text("网络错误或服务器错误，请稍后再试...");
+            }
+        })
+    })
+</script>
 </body>
 </html>

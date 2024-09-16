@@ -26,5 +26,7 @@ urlpatterns = [
     # 开始是西安我们的验证码的操作
     path('get_code/', views.get_code),
     # 主页的页面
-    path('home/', views.home)
+    path('home/', views.home),
+    # 开始实现设置修改密码的操作
+    path('set_password/', views.set_password)
 ]

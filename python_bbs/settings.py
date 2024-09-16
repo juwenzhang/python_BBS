@@ -128,3 +128,6 @@ CSRF_COOKIE_SECURE = True
 
 # 开始实现注册我们的auth_user 的模块类
 AUTH_USER_MODEL = 'app01.UserInfo'
+
+# 开始实现在我们的全局中实现配置我们的登录验证器的跳转路径
+LOGIN_URL = '/login/'
