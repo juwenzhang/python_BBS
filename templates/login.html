@@ -15,18 +15,20 @@
         <div class="col-md-8 col-md-offset-2">
             <h1 class="text-center">登录页面</h1>
             <div class="form-group">
-                <label for="username">用户名</label><input type="text" class="form-control" id="username">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" name="username">
             </div>
             <span></span>
             <div class="form-group">
-                <label for="password">密码</label><input type="password" class="form-control" id="password">
+                <label for="password">密码</label>
+                <input type="password" class="form-control" id="password" name="password">
             </div>
             <span></span>
             <div class="form-group">
                 <label for="code">验证码</label>
                 <div class="row">
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="code">
+                        <input type="text" class="form-control" id="code" name="code">
                     </div>
                     <div class="col-md-3">
                         <!-- 开始通过我们的图片来实现呈现我们的验证码 -->
@@ -47,6 +49,7 @@
     </div>
 
     <script>
+        let csrftoken = '{{ csrf_token }}'
         // 给我们的图片一个点击事件
         $("#id_img").on("click", function() {
             // 只要我们向我们的路径后面添加一个 ? 就可以实现我们的刷新请求页面
@@ -64,7 +67,7 @@
                     'username': $("#username").val(),
                     'password': $("#password").val(),
                     'code': $("#code").val(),
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    csrfmiddlewaretoken: csrftoken
                 },
                 contentType:false,
                 processData:false,
@@ -75,8 +78,10 @@
                     }else{
                         // 开始实现渲染我们的报错信息
                         $("#error_message").text(response.message);
-                        // $("#error_message").addClass("has-error")
                     }
+                },
+                error:function(){
+                    $("#error_message").text("网络错误或服务器错误，请稍后再试。");
                 }
             })
         })

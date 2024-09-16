@@ -43,37 +43,6 @@ def Register(request):
     return render(request, "register.html", locals())
 
 
-# 实现登录页面的视图函数
-
-def Login(request):
-    if request.method == "POST":
-        back_info = {"code": 200, "message": "登录成功"}
-        # 开始实现设置我们的前端传递给后端的数据
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        code = request.POST.get("code")
-        # csrfmiddlewaretoken = request.POST.get("csrfmiddlewaretoken")
-        # 先实现校验我们的验证码是否正确（我们不需要实现区分大小写）
-        # 存在bug
-        if request.session.get("code") == code:
-            # 然后实现校验用户名是否存在以及密码是否正确
-            user_obj = auth.authenticate(request, username=username, password=password)
-            if user_obj:
-                # 保存用户的登录状态，同时返回项目的home界面
-                auth.login(request, user_obj)
-                back_info["url"] = "/home/"
-                back_info["code"] = 200
-                back_info["message"] = "登录成功"
-            else:
-                back_info["code"] = 400
-                back_info["message"] = "用户名或者密码错误..."
-        else:
-            back_info["code"] = 400
-            back_info['message'] = "验证码错误..."
-        return JsonResponse(back_info)
-    return render(request, "login.html", locals())
-
-
 # 开始实现我们的随机生成颜色的视图函数的书写
 def get_random_color():
     # 颜色的更改就是实现的是我们的三原色的随机更改（就是实现的是随机生成三个数字即可）
@@ -105,17 +74,46 @@ def get_code(request):
         # 实现随机选择上面的一个值
         tem = random.choice([random_upper, random_lower, str(random_int)])
         # img_draw.text(坐标， 字符， 颜色， 字体样式)
-        img_draw.text(((i+1)*33.33, 5), tem, fill=get_random_color(), font=img_font)
+        img_draw.text(((i+1)*28, 5), tem, fill=get_random_color(), font=img_font)
         code += tem
     # 通过随机验证码来实现我们的验证码的校验
-    # print(code)
+    # print(len(code))
+    # print(code.lower())
     # 有的时候我们实现的生成的验证码是看不清楚的，这个时候就需要我们前端通过我们的点击事件发送ajax请求来实现变更验证码
     # 前端就实现了我们的验证码的局部刷新，这个就是我们的ajax的特点之一，实现页面的局部刷新的特点
-    request.session["code"] = code
+    request.session["code"] = code.lower()
     # 创建一个io管理器出来
     io_obj = BytesIO()
     img_obj.save(io_obj, format="PNG")
     return HttpResponse(io_obj.getvalue(), content_type="image/png")
+
+
+# 实现登录页面的视图函数
+def Login(request):
+    if request.method == "POST":
+        back_info = {"code": 200, "message": "登录成功"}
+        # 开始实现设置我们的前端传递给后端的数据
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        code = request.POST.get("code")
+        # 先实现校验我们的验证码是否正确（我们不需要实现区分大小写）
+        # 存在bug
+        print(code)
+        if request.session["code"] == str(code).lower():
+            # 然后实现校验用户名是否存在以及密码是否正确
+            user_obj = auth.authenticate(request, username=username, password=password)
+            if user_obj:
+                # 保存用户的登录状态，同时返回项目的home界面
+                auth.login(request, user_obj)
+                back_info["url"] = "/home/"
+            else:
+                back_info["code"] = 400
+                back_info["message"] = "用户名或者密码错误..."
+        else:
+            back_info["code"] = 401
+            back_info['message'] = "验证码错误..."
+        return JsonResponse(back_info)
+    return render(request, "login.html", locals())
 
 
 # 开始书写我们的主页的视图函数
