@@ -6,6 +6,8 @@
 使用的开发框架是：
 后端: django
 前端: jquery    
+
+前端使用组件库: bootstrap组件库    
 </div>
 ```
 

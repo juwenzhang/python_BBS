@@ -49,13 +49,28 @@
     </div>
 
     <script>
-        let csrftoken = '{{ csrf_token }}'
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         // 给我们的图片一个点击事件
         $("#id_img").on("click", function() {
             // 只要我们向我们的路径后面添加一个 ? 就可以实现我们的刷新请求页面
             let oldVal = $("#id_img").attr("src");
             $(this).attr("src", oldVal+"?");
         })
+
 
         // 开始实现我们的通过ajax向我们的后端发送数据
         $("#id_commit").click(function(){
@@ -67,10 +82,9 @@
                     'username': $("#username").val(),
                     'password': $("#password").val(),
                     'code': $("#code").val(),
-                    csrfmiddlewaretoken: csrftoken
+                    // 同时传递一个csrf的验证码
+                    'csrfmiddlewaretoken': getCookie('csrftoken')
                 },
-                contentType:false,
-                processData:false,
                 // 开始设置我们的请求成功的响应函数
                 success:function(response){
                     if (response.code === 200){
@@ -81,7 +95,7 @@
                     }
                 },
                 error:function(){
-                    $("#error_message").text("网络错误或服务器错误，请稍后再试。");
+                    $("#error_message").text("网络错误或服务器错误，请稍后再试...");
                 }
             })
         })
