@@ -45,4 +45,22 @@ StringIO 实现的是临时存储数据,返回的是我们的字符串格式
 </div>
 
 <a>https://www.zhaozi.cn/</a>
+
+<p>CSRF_COOKIE_SECURE 设置为 True，这样 CSRF Cookies 就只会通过 HTTPS 发送</p>
+
+前端处理cookie的函数
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 ```
