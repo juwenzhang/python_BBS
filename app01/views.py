@@ -79,7 +79,7 @@ def get_code(request):
     # 通过随机验证码来实现我们的验证码的校验
     # 有的时候我们实现的生成的验证码是看不清楚的，这个时候就需要我们前端通过我们的点击事件发送ajax请求来实现变更验证码
     # 前端就实现了我们的验证码的局部刷新，这个就是我们的ajax的特点之一，实现页面的局部刷新的特点
-    request.session["code"] = code
+    request.session["code"] = code.lower()
     # 创建一个io管理器出来
     io_obj = BytesIO()
     img_obj.save(io_obj, format="PNG")
@@ -94,9 +94,8 @@ def Login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         code = request.POST.get("code")
-        print(code)
         # 开始进行我们的校验验证码是否正确
-        if request.session.get("code") == code:
+        if request.session.get("code") == code.lower():
             # 然后实现校验用户名以及密码
             user_obj = auth.authenticate(username=username, password=password)
             if user_obj:
