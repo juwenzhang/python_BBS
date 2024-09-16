@@ -26,5 +26,5 @@ urlpatterns = [
     # 开始是西安我们的验证码的操作
     path('get_code/', views.get_code),
     # 主页的页面
-    path('hoem/', views.home)
+    path('home/', views.home)
 ]
