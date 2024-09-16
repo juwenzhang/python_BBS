@@ -121,7 +121,7 @@ def home(request):
 
 # 开始实现书写我们的修改密码的后端逻辑
 @login_required
-@csrf_exempt
+# @csrf_exempt
 def set_password(request):
     # 我们这一步的实现的时候，使用的就是实现我们的模态栏的出现让用户实现修改
     # 通过我们的z-index 来实现我们的功能 https://baike.baidu.com/item/z-index/7662375?fr=ge_ala
@@ -135,7 +135,7 @@ def set_password(request):
         confirm_password = request.POST.get("confirm_password")
         # 开始实现我们的数据的校验
         is_right = request.user.check_password(old_password)
-        print(request.user.password, is_right, old_password)
+        print(request.user.password, is_right, old_password, new_password, confirm_password)
         if is_right:
             # 判断两次密码是否一致
             if new_password == confirm_password:
