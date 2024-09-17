@@ -158,3 +158,16 @@ def set_password(request):
 def logout(request):
     auth.logout(request)
     return redirect("/home/")
+
+
+# 开始书写我们的个人站点的视图函数
+def user_site(request, username):
+    # 开始实现我们的当前的个人站点是否存在，否则就是我们的 404 NOT FOUND 页面实现返回
+    user_obj = models.UserInfo.objects.filter(username=username).first()
+    if not user_obj:
+        # 这个时候我们的用户不存在，直接返回一个 404 NOT FOUND 的页面
+        return render(request, "error.html", locals())
+    blog = user_obj.blog
+    # 开始实现查询我们的个人站点的含有的所有文章
+    article_list = models.Article.objects.filter(blog=blog)
+    return render(request, "user_site.html", locals())

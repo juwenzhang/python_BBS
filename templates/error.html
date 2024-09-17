@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+    <script src="{% static 'jquery_3.6.0.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <style>
+        body{
+            background-color: #440202;
+        }
+    </style>
+</head>
+<body>
+
+<!--我们实现的时候，我们需要的是返回首页，同时实现的是我们的通过a链接实现跳转或者直接通过点击屏幕实现跳转-->
+<div style="position: relative;">
+    <div style="position: absolute;left: 35%;top: 100px;border: 1px solid black;background-color: #5b112a ">
+        <p style="color:red">404 NOT FOUND 文件资源未找到...</p>
+        <p style="color:red">当前你的网络不佳，或者对应的内容被删除，或者作者对该篇资源设置为的私有状态</p>
+        <p style="color:red">可以访问<a href="/home/">更多资源</a></p>
+    </div>
+</div>
+</body>
+
+<script>
+    $(document).on("click", function(){
+        let timer = setInterval(function(){
+            window.location.href = "/home/";
+            window.clearInterval(timer);
+        }, 1000)
+    })
+</script>
+</html>
