@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -80,7 +80,10 @@ DATABASES = {
         'PASSWORD': '451674',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        'CHARSET': 'utf8'
+        'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES',  # 确保使用严格模式
+        },
+        'CHARSET': 'utf8mb4'
     }
 }
 

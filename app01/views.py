@@ -9,8 +9,19 @@ from app01.myforms.myforms import MyRegisterForm
 from django.contrib import auth
 # 这个就是来实现我们的判断是否处于登录状态的一个登录验证器
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+from django.db import connection
+
 
 # Create your views here.
+
+
+def set_time_zone():
+    with connection.cursor() as cursor:
+        cursor.execute("SET time_zone = 'UTC'")
+
+
 
 # 实现注册的视图函数
 def Register(request):
@@ -77,7 +88,7 @@ def get_code(request):
         # 实现随机选择上面的一个值
         tem = random.choice([random_upper, random_lower, str(random_int)])
         # img_draw.text(坐标， 字符， 颜色， 字体样式)
-        img_draw.text(((i+1)*28, 5), tem, fill=get_random_color(), font=img_font)
+        img_draw.text(((i + 1) * 28, 5), tem, fill=get_random_color(), font=img_font)
         code += tem
     # 通过随机验证码来实现我们的验证码的校验
     # 有的时候我们实现的生成的验证码是看不清楚的，这个时候就需要我们前端通过我们的点击事件发送ajax请求来实现变更验证码
@@ -168,6 +179,18 @@ def user_site(request, username):
         # 这个时候我们的用户不存在，直接返回一个 404 NOT FOUND 的页面
         return render(request, "error.html", locals())
     blog = user_obj.blog
+    set_time_zone()
     # 开始实现查询我们的个人站点的含有的所有文章
     article_list = models.Article.objects.filter(blog=blog)
+
+    # 查询当前用户得分类以及分类下面得文章数目
+    category_list = (models.Category.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
+                     .values_list('name', 'count_num'))
+    # 查询当前用户得所有标签以及标签下得文章数
+    tag_list = (models.Tag.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
+                .values_list('name', 'count_num'))
+    # 按照年月统计文章以及数量
+    data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
+                  .values('month')).annotate(count_num=(Count('pk')))
+                 .values_list('month', 'count_num'))
     return render(request, "user_site.html", locals())

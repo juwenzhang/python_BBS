@@ -37,7 +37,7 @@
       <ul class="nav navbar-nav navbar-right">
         <!-- 开始实现我们的判断用户是否处于登录状态 -->
         {% if request.user.is_authenticated %}
-            <li><a href="#">{{ request.user.username }} <span class="glyphicon glyphicon-user"></span></a></li>
+            <li><a href="/{{ request.user.username }}/">{{ request.user.username }} <span class="glyphicon glyphicon-user"></span></a></li>
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                    aria-haspopup="true" aria-expanded="false">更多操作 <span class="glyphicon glyphicon-cog"></span></a>
@@ -109,7 +109,7 @@
         <div class="col-md-2">
             <div class="panel panel-primary">
               <div class="panel-heading">
-                <h3 class="panel-title">文章1</h3>
+                <h3 class="panel-title">文章分类</h3>
               </div>
               <div class="panel-body">
                 文章主要内容
@@ -118,7 +118,7 @@
 
             <div class="panel panel-danger">
               <div class="panel-heading">
-                <h3 class="panel-title">文章2</h3>
+                <h3 class="panel-title">文章标签</h3>
               </div>
               <div class="panel-body">
                 文章主要内容
@@ -127,25 +127,7 @@
 
             <div class="panel panel-success">
               <div class="panel-heading">
-                <h3 class="panel-title">文章3</h3>
-              </div>
-              <div class="panel-body">
-                文章主要内容
-              </div>
-            </div>
-
-            <div class="panel panel-warning">
-              <div class="panel-heading">
-                <h3 class="panel-title">文章4</h3>
-              </div>
-              <div class="panel-body">
-                文章主要内容
-              </div>
-            </div>
-
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <h3 class="panel-title">文章1</h3>
+                <h3 class="panel-title">发布日期</h3>
               </div>
               <div class="panel-body">
                 文章主要内容
@@ -167,7 +149,7 @@
                       {{ article_obj.desc }}
                     </div>
                     <div>
-                        <span><a href="">{{ article_obj.blog.userinfo.username }}</a></span>
+                        <span><a href="/{{article_obj.blog.userinfo.username}}/">{{ article_obj.blog.userinfo.username }}</a></span>
                         &nbsp;&nbsp;
                         <span>{{ article_obj.create_time|date:'Y-m-d h:i:s' }}</span>
                         &nbsp;&nbsp;
