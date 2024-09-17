@@ -21,7 +21,7 @@
 <!--开始实现我们的首页的实现-->
 
 <!--第一部分就是我们的导航栏的实现-->
-<nav class="navbar navbar-default" style="background: #a6e1ec;box-sizing: border-box">
+<nav class="navbar navbar-default" style="background: #a6e1ec;">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -52,7 +52,7 @@
                   <li><a href="#">修改头像</a></li>
                   <li><a href="#">后台管理</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="#">退出登录</a></li>
+                  <li><a href="/logout/">退出登录</a></li>
                 </ul>
            </li>
            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -92,12 +92,142 @@
         {% else %}
           <li><a href="/login/">登录</a></li>
           <li><a href="/register/">注册</a></li>
+          <li>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-haspopup="true" aria-expanded="false">更多操作 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li><a href="/set_password/">修改密码</a></li>
+                  <li><a href="#">修改头像</a></li>
+                  <li><a href="#">后台管理</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="/logout/">退出登录</a></li>
+              </ul>
+          </li>
         {% endif %}
       </ul>
     </div>
   </div>
 </nav>
 
+<!--开始实现我们的首页的主题部分的实现-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章1</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-danger">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章2</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章3</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-warning">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章4</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章1</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <!--开始实现我们获取用户含有的所有的文字实现展示出来即可-->
+            <ul class="media-list">
+            {% for article_obj in article_queryset %}
+                  <li class="media">
+                    <h4 class="media-heading"><a href="">{{ article_obj.title }}</a></h4>
+                    <div class="media-left">
+                      <a href="#">
+                        <img class="media-object" src="{% static 'images/default.png' %}" width="50px" alt="...">
+                      </a>
+                    </div>
+                    <div class="media-body">
+                      {{ article_obj.desc }}
+                    </div>
+                    <div>
+                        <span><a href="">{{ article_obj.blog.userinfo.username }}</a></span>
+                        <span>{{ article_obj.create_time|date:'Y-m-d h:i:s' }}</span>
+                    </div>
+                  </li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章1</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-danger">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章2</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章3</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-warning">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章4</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <h3 class="panel-title">文章1</h3>
+              </div>
+              <div class="panel-body">
+                文章主要内容
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--开始实现书写我们的js的思维逻辑-->
 <script>
     // 获取 CSRF 令牌

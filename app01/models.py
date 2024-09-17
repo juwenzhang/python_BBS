@@ -16,6 +16,9 @@ class UserInfo(AbstractUser):
     # 开始添加外键字段: 用户和个人站点之间是一对一的关系
     blog = models.OneToOneField(to="Blog", null=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.username
+
 
 # 开始个人站点表的设计
 class Blog(models.Model):
@@ -24,6 +27,9 @@ class Blog(models.Model):
     # 实现传入的是我们的CSS或者说是JS 的文件路径即可
     site_theme = models.CharField(max_length=64, verbose_name="站点样式")
 
+    def __str__(self):
+        return self.site_name
+
 
 
 # 文章分类表
@@ -31,12 +37,16 @@ class Category(models.Model):
     name = models.CharField(max_length=32, verbose_name="文章分类")
     # 个人站点和文章分类之间是一对多关系
     blog = models.ForeignKey(to="Blog", on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 
 # 文章标签
 class Tag(models.Model):
     name = models.CharField(max_length=32, verbose_name="文章标签")
     blog = models.ForeignKey(to="Blog", on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 
 # 文章表
@@ -54,6 +64,8 @@ class Article(models.Model):
     tags = models.ManyToManyField(to="Tag")
     # 文章和分类是一对多关系
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE, null=True, blank=True)
+    def __str__(self):
+        return self.title
 
 
 # 点赞点睬表

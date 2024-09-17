@@ -28,5 +28,7 @@ urlpatterns = [
     # 主页的页面
     path('home/', views.home),
     # 开始实现设置修改密码的操作
-    path('set_password/', views.set_password)
+    path('set_password/', views.set_password),
+    # 开始实现我们的退出登录功能的实现
+    path('logout/', views.logout),
 ]

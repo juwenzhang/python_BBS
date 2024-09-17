@@ -1,14 +1,14 @@
 from django.http import JsonResponse
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
 from app01 import models
+from app01.models import Article
 from app01.myforms.myforms import MyRegisterForm
 from django.contrib import auth
 # 这个就是来实现我们的判断是否处于登录状态的一个登录验证器
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -116,12 +116,13 @@ def Login(request):
 
 # 开始书写我们的主页的视图函数
 def home(request):
+    # 开始实现获取所有的文章标题
+    article_queryset = models.Article.objects.all()
     return render(request, "home.html", locals())
 
 
 # 开始实现书写我们的修改密码的后端逻辑
 @login_required
-# @csrf_exempt
 def set_password(request):
     # 我们这一步的实现的时候，使用的就是实现我们的模态栏的出现让用户实现修改
     # 通过我们的z-index 来实现我们的功能 https://baike.baidu.com/item/z-index/7662375?fr=ge_ala
@@ -135,7 +136,7 @@ def set_password(request):
         confirm_password = request.POST.get("confirm_password")
         # 开始实现我们的数据的校验
         is_right = request.user.check_password(old_password)
-        print(request.user.password, is_right, old_password, new_password, confirm_password)
+        # print(request.user.password, is_right, old_password, new_password, confirm_password)
         if is_right:
             # 判断两次密码是否一致
             if new_password == confirm_password:
@@ -149,3 +150,11 @@ def set_password(request):
             back_info["code"] = 400
             back_info["message"] = "原密码错误..."
         return JsonResponse(back_info)
+
+
+# 开始实现我们的退出登录的功能的实现
+# 退出登录的时候，我们还是需要的是我们的处于登录状态才可以实现退出，否则就不用
+@login_required
+def logout(request):
+    auth.logout(request)
+    return redirect("/home/")
