@@ -55,7 +55,7 @@ class Article(models.Model):
     desc = models.CharField(max_length=255, verbose_name="文章简介")
     content = models.TextField(verbose_name="文章内容")
     create_time = models.DateTimeField(auto_now_add=True)
-    up_time = models.BigIntegerField(verbose_name="点赞数", default=0)
+    up_num = models.BigIntegerField(verbose_name="点赞数", default=0)
     down_num = models.BigIntegerField(verbose_name="点睬数", default=0)
     comment_num = models.BigIntegerField(verbose_name="评论数", default=0)
     # 个人站点和文章之间是一对多关系

@@ -10,12 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
     <script src="{% static 'jquery_3.6.0.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <style>
-        *{
-            padding: 0;
-            margin: 0;
-        }
-    </style>
 </head>
 <body>
 <!--开始实现我们的首页的实现-->
@@ -43,16 +37,16 @@
       <ul class="nav navbar-nav navbar-right">
         <!-- 开始实现我们的判断用户是否处于登录状态 -->
         {% if request.user.is_authenticated %}
-            <li><a href="#">{{ request.user.username }}</a></li>
+            <li><a href="#">{{ request.user.username }} <span class="glyphicon glyphicon-user"></span></a></li>
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                   aria-haspopup="true" aria-expanded="false">更多操作 <span class="caret"></span></a>
+                   aria-haspopup="true" aria-expanded="false">更多操作 <span class="glyphicon glyphicon-cog"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="" data-toggle="modal" data-target=".bs-example-modal-lg">修改密码</a></li>
                   <li><a href="#">修改头像</a></li>
                   <li><a href="#">后台管理</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="/logout/">退出登录</a></li>
+                  <li><a href="/logout/">退出登录 <span class="glyphicon glyphicon-log-out"></span></a></li>
                 </ul>
            </li>
            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -166,7 +160,7 @@
                     <h4 class="media-heading"><a href="">{{ article_obj.title }}</a></h4>
                     <div class="media-left">
                       <a href="#">
-                        <img class="media-object" src="{% static 'images/default.png' %}" width="50px" alt="...">
+                        <img class="media-object" src="media/{{article_obj.blog.userinfo.avatar}}" width="100px" alt="...">
                       </a>
                     </div>
                     <div class="media-body">
@@ -174,8 +168,16 @@
                     </div>
                     <div>
                         <span><a href="">{{ article_obj.blog.userinfo.username }}</a></span>
+                        &nbsp;&nbsp;
                         <span>{{ article_obj.create_time|date:'Y-m-d h:i:s' }}</span>
+                        &nbsp;&nbsp;
+                        <span><span class="glyphicon glyphicon-comment"></span>评论数{{ article_obj.comment_num }}</span>
+                        &nbsp;&nbsp;
+                        <span><span class="glyphicon glyphicon-thumbs-up"></span>点赞数{{ article_obj.up_num }}</span>
+                        &nbsp;&nbsp;
+                        <span><span class="glyphicon glyphicon-thumbs-down"></span>点睬数{{ article_obj.up_num }}</span>
                     </div>
+                    <br>
                   </li>
             {% endfor %}
             </ul>
@@ -228,6 +230,7 @@
         </div>
     </div>
 </div>
+
 <!--开始实现书写我们的js的思维逻辑-->
 <script>
     // 获取 CSRF 令牌

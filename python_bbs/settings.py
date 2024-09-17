@@ -131,3 +131,8 @@ AUTH_USER_MODEL = 'app01.UserInfo'
 
 # 开始实现在我们的全局中实现配置我们的登录验证器的跳转路径
 LOGIN_URL = '/login/'
+
+# 网站上使用得静态文件的文件默认存放位置是static
+# 用户实现上传的文件也应该存放到某一个的文件夹下
+# media文件就是用来配置用户的上传的文件的存放位置
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

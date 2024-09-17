@@ -14,8 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from app01 import views
+# 开始实现配置我们media
+from python_bbs import settings
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +34,7 @@ urlpatterns = [
     path('set_password/', views.set_password),
     # 开始实现我们的退出登录功能的实现
     path('logout/', views.logout),
+
+    # 开始实现配置我们的media,实现暴露后端指定文件资源,就是前端可以实现的是通过网址来实现获取我们的文件资源
+    re_path('media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
