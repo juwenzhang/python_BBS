@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
     <script src="{% static 'jquery_3.6.0.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <link rel="stylesheet" href="/media/CSS/{{blog.site_theme}}">
+    {% if blog.site_theme %}
+        <link rel="stylesheet" href="/media/CSS/{{blog.site_theme}}">
+    {% endif %}
 </head>
 
 <body>
@@ -26,7 +28,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">{{ blog.site_title }}</a>
+      {% if blog.site_title %}
+        <a class="navbar-brand" href="#">{{ blog.site_title }}</a>
+      {% else %}
+        <a class="navbar-brand" href="#">User_BBS</a>
+      {% endif %}
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -38,7 +44,7 @@
       <ul class="nav navbar-nav navbar-right">
         <!-- 开始实现我们的判断用户是否处于登录状态 -->
         {% if request.user.is_authenticated %}
-            <li><a href="/home/">{{ request.user.username }} <span class="glyphicon glyphicon-home"></span></a></li>
+            <li><a href="/home/">{{ request.user.username }} <span class="glyphicon glyphicon-user"></span></a></li>
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                    aria-haspopup="true" aria-expanded="false">更多操作 <span class="glyphicon glyphicon-cog"></span></a>
@@ -108,27 +114,49 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">文章分类</h3>
-              </div>
-              <div class="panel-body">
-                  {% for category_item in category_list %}
-                    <p><a href="">{{category_item.0}}({{category_item.1}})</a></p>
-                  {% endfor %}
-              </div>
-            </div>
+            {% if category_item %}
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">文章分类</h3>
+                  </div>
+                  <div class="panel-body">
+                      {% for category_item in category_list %}
+                        <p><a href="">{{category_item.0}}({{category_item.1}})</a></p>
+                      {% endfor %}
+                  </div>
+                </div>
+            {% else %}
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">文章分类</h3>
+                  </div>
+                  <div class="panel-body">
+                      <p style="color:red">博主很懒，现在啥也没写</p>
+                  </div>
+                </div>
+            {% endif %}
 
-            <div class="panel panel-danger">
-              <div class="panel-heading">
-                <h3 class="panel-title">文章标签</h3>
-              </div>
-              <div class="panel-body">
-                 {% for tag_item in tag_list %}
-                    <p><a href="">{{tag_item.0}}({{tag_item.1}})</a></p>
-                 {% endfor %}
-              </div>
-            </div>
+            {% if tag_list %}
+                <div class="panel panel-danger">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">文章标签</h3>
+                  </div>
+                  <div class="panel-body">
+                     {% for tag_item in tag_list %}
+                        <p><a href="">{{tag_item.0}}({{tag_item.1}})</a></p>
+                     {% endfor %}
+                  </div>
+                </div>
+            {% else %}
+                <div class="panel panel-danger">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">文章分类</h3>
+                  </div>
+                  <div class="panel-body">
+                      <p style="color:red">博主很懒，现在啥也没写</p>
+                  </div>
+                </div>
+            {% endif %}
 
 <!--            <div class="panel panel-success">-->
 <!--              <div class="panel-heading">-->

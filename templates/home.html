@@ -25,7 +25,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">BBS</a>
+      <a class="navbar-brand" href="#">Home_BBS</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -37,7 +37,7 @@
       <ul class="nav navbar-nav navbar-right">
         <!-- 开始实现我们的判断用户是否处于登录状态 -->
         {% if request.user.is_authenticated %}
-            <li><a href="/{{ request.user.username }}/">{{ request.user.username }} <span class="glyphicon glyphicon-user"></span></a></li>
+            <li><a href="/{{ request.user.username }}/">{{ request.user.username }} <span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                    aria-haspopup="true" aria-expanded="false">更多操作 <span class="glyphicon glyphicon-cog"></span></a>
