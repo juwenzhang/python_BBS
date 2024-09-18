@@ -17,9 +17,9 @@ from django.db import connection
 # Create your views here.
 
 
-def set_time_zone():
-    with connection.cursor() as cursor:
-        cursor.execute("SET time_zone = 'UTC'")
+# def set_time_zone():
+#     with connection.cursor() as cursor:
+#         cursor.execute("SET time_zone = 'UTC'")
 
 
 
@@ -179,7 +179,7 @@ def user_site(request, username):
         # 这个时候我们的用户不存在，直接返回一个 404 NOT FOUND 的页面
         return render(request, "error.html", locals())
     blog = user_obj.blog
-    set_time_zone()
+    # set_time_zone()
     # 开始实现查询我们的个人站点的含有的所有文章
     article_list = models.Article.objects.filter(blog=blog)
 
@@ -190,7 +190,7 @@ def user_site(request, username):
     tag_list = (models.Tag.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
                 .values_list('name', 'count_num'))
     # 按照年月统计文章以及数量
-    data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
-                  .values('month')).annotate(count_num=(Count('pk')))
-                 .values_list('month', 'count_num'))
+    # data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
+    #               .values('month')).annotate(count_num=(Count('pk')))
+    #              .values_list('month', 'count_num'))
     return render(request, "user_site.html", locals())
