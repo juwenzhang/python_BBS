@@ -92,6 +92,16 @@ z-index 属性来控制我们的不同的盒子的显示层级即可
 我们实现开发的时候尤其注意的是解决我们的
 csrf_token: 的伪造网站的问题  CSRF_COOKIE_SECURE = True
 time_zone 的配置问题 :以及一些关于我们的连接服务器的时候的时间不匹配的问题就是我们的 time_zone 的配置问题
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = False
+
+注意我们的配置项的修改，否则就可能导致我们的时间区域的问题，只要涉及到了时间方面的处理
 ```
 
 
