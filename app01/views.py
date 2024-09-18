@@ -190,7 +190,7 @@ def user_site(request, username):
     tag_list = (models.Tag.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
                 .values_list('name', 'count_num'))
     # 按照年月统计文章以及数量
-    # data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
-    #               .values('month')).annotate(count_num=(Count('pk')))
-    #              .values_list('month', 'count_num'))
+    data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
+                  .values('month')).annotate(count_num=(Count('pk')))
+                 .values_list('month', 'count_num'))
     return render(request, "user_site.html", locals())
