@@ -36,6 +36,8 @@ urlpatterns = [
     path('logout/', views.logout),
     # 开始实现我们的个人的姓名的实现书写
     re_path(r'^(?P<username>\w+)/$', views.user_site),
+    # 开始我们的文章详情页
+    re_path(r'^(?P<username>\w+)/article/(?P<article_id>\d+)/', views.article_detail),
     # 开始实现我们的侧边栏的筛选功能
     re_path(r'^(?P<username>\w+)/(?P<condition>category|tag|data)/(?P<param>.*)/', views.user_site),
     # re_path(r'^(?P<username>\w+)/category/(\w+)/', views.user_site),  # 文章分类

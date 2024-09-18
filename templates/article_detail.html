@@ -1,0 +1,8 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+<h1 style="color:skyblue">{{article_obj.title}}</h1>
+<div class="article_content">
+    {{ article_obj.content|safe }}
+</div>
+{% endblock %}

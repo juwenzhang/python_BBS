@@ -186,35 +186,8 @@
 
         <div class="col-md-8">
             <!--开始实现我们获取用户含有的所有的文字实现展示出来即可-->
-            <ul class="media-list">
-            {% for article_obj in article_list %}
-                  <li class="media">
-                    <h4 class="media-heading"><a href="/{{username}}/article/{{article_obj.pk}}/">{{ article_obj.title }}</a></h4>
-                    <div class="media-left">
-                      <a href="#">
-                        <img class="media-object" src="/media/{{article_obj.blog.userinfo.avatar}}" width="100px" alt="...">
-                      </a>
-                    </div>
-                    <div class="media-body">
-                      {{ article_obj.desc }}
-                    </div>
-                    <div class="pull-right">
-                        <span>posted</span>
-                        &nbsp;&nbsp;
-                         <span>@</span>
-                        &nbsp;&nbsp;
-                        <span>{{ article_obj.create_time|date:'Y-m-d h:i:s' }}</span>
-                        &nbsp;&nbsp;
-                        <span><span class="glyphicon glyphicon-comment"></span>评论数{{ article_obj.comment_num }}</span>
-                        &nbsp;&nbsp;
-                        <span><span class="glyphicon glyphicon-thumbs-up"></span>点赞数{{ article_obj.up_num }}</span>
-                        &nbsp;&nbsp;
-                        <span><a href=""><span class="glyphicon glyphicon-edit"></span>编辑</a></span>
-                    </div>
-                    <br>
-                  </li>
-            {% endfor %}
-            </ul>
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 </div>

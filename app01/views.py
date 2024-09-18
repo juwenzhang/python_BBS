@@ -4,14 +4,12 @@ from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import random
 from app01 import models
-from app01.models import Article
 from app01.myforms.myforms import MyRegisterForm
 from django.contrib import auth
 # 这个就是来实现我们的判断是否处于登录状态的一个登录验证器
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from django.db import connection
 
 
 # Create your views here.
@@ -20,8 +18,6 @@ from django.db import connection
 # def set_time_zone():
 #     with connection.cursor() as cursor:
 #         cursor.execute("SET time_zone = 'UTC'")
-
-
 
 # 实现注册的视图函数
 def Register(request):
@@ -211,3 +207,13 @@ def user_site(request, username, **kwargs):
                   .values('month')).annotate(count_num=(Count('pk')))
                  .values_list('month', 'count_num', "pk"))
     return render(request, "user_site.html", locals())
+
+
+# 开始实现我们的获取我们的文章的详情页id
+def article_detail(request, username, article_id):
+    # 这个就是我们的文章的详情页的视图函数
+    article_obj = models.Article.objects.filter(pk=article_id).first()
+    blog = article_obj.blog
+    if not article_obj:
+        return render(request, "error.html", locals())
+    return render(request, "article_detail.html", locals())
