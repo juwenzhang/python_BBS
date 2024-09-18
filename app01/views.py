@@ -172,25 +172,42 @@ def logout(request):
 
 
 # 开始书写我们的个人站点的视图函数
-def user_site(request, username):
+# 我们的第三个参数的实现就是来实现的是我们的 那些选择参数的添加的实现
+def user_site(request, username, **kwargs):
+    # 这个时候我们的实现的就是username的是一个必选的参数，**kwargs 就是实现的是我们的接收我们的可选参数
+
     # 开始实现我们的当前的个人站点是否存在，否则就是我们的 404 NOT FOUND 页面实现返回
     user_obj = models.UserInfo.objects.filter(username=username).first()
     if not user_obj:
         # 这个时候我们的用户不存在，直接返回一个 404 NOT FOUND 的页面
         return render(request, "error.html", locals())
     blog = user_obj.blog
-    # set_time_zone()
     # 开始实现查询我们的个人站点的含有的所有文章
     article_list = models.Article.objects.filter(blog=blog)
 
+    # 开始实现我们对文章列表实现我们的再次筛选就是通过我们的最终的可选参数来实现的筛选
+    if kwargs:
+        # 开始实现我们的获取可选参数的值，当传入的这个有值的话
+        # 通过我们的这个的实现的时候是通过通过我们的字典来实现的接收参数的
+        condition = kwargs.get('condition')  # 这里只含有我们的三种情况 category |  tag  |  data
+        param = kwargs.get('param')
+        # 开始实现我们的对文章实现查询过滤
+        if condition == "category":
+            article_list = article_list.filter(category__id=param)
+        elif condition == "tag":
+            article_list = article_list.filter(tags__pk=param)
+        else:
+            year, month = param.split("-")
+            article_list = article_list.filter(create_time__year=year, create_time__month=month)
+
     # 查询当前用户得分类以及分类下面得文章数目
     category_list = (models.Category.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
-                     .values_list('name', 'count_num'))
+                     .values_list('name', 'count_num', "pk"))
     # 查询当前用户得所有标签以及标签下得文章数
     tag_list = (models.Tag.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))
-                .values_list('name', 'count_num'))
+                .values_list('name', 'count_num', "pk"))
     # 按照年月统计文章以及数量
     data_list = ((models.Article.objects.filter(blog=blog).annotate(month=TruncMonth('create_time'))
                   .values('month')).annotate(count_num=(Count('pk')))
-                 .values_list('month', 'count_num'))
+                 .values_list('month', 'count_num', "pk"))
     return render(request, "user_site.html", locals())

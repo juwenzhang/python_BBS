@@ -35,7 +35,12 @@ urlpatterns = [
     # 开始实现我们的退出登录功能的实现
     path('logout/', views.logout),
     # 开始实现我们的个人的姓名的实现书写
-    re_path(r'^(?P<username>\w+)/$', views.user_site, name='user_site'),
+    re_path(r'^(?P<username>\w+)/$', views.user_site),
+    # 开始实现我们的侧边栏的筛选功能
+    re_path(r'^(?P<username>\w+)/(?P<condition>category|tag|data)/(?P<param>.*)/', views.user_site),
+    # re_path(r'^(?P<username>\w+)/category/(\w+)/', views.user_site),  # 文章分类
+    # re_path(r'^(?P<username>\w+)/tag/(\w+)/', views.user_site),  # 文章标签
+    # re_path(r'^(?P<username>\w+)/data/(\w+)/', views.user_site)  # 文章日期
     # 开始实现配置我们的media,实现暴露后端指定文件资源,就是前端可以实现的是通过网址来实现获取我们的文件资源
     re_path('media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

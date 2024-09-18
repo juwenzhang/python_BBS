@@ -114,14 +114,15 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
-            {% if category_item %}
+            {% if category_list %}
                 <div class="panel panel-primary">
                   <div class="panel-heading">
                     <h3 class="panel-title">文章分类</h3>
                   </div>
                   <div class="panel-body">
                       {% for category_item in category_list %}
-                        <p><a href="">{{category_item.0}}({{category_item.1}})</a></p>
+                        <p><a href="/{{ username }}/category/{{ category_item.2 }}/">
+                            {{category_item.0}}({{category_item.1}})</a></p>
                       {% endfor %}
                   </div>
                 </div>
@@ -143,14 +144,15 @@
                   </div>
                   <div class="panel-body">
                      {% for tag_item in tag_list %}
-                        <p><a href="">{{tag_item.0}}({{tag_item.1}})</a></p>
+                        <p><a href="/{{ username }}/tag/{{ tag_item.2 }}/">
+                            {{tag_item.0}}({{tag_item.1}})</a></p>
                      {% endfor %}
                   </div>
                 </div>
             {% else %}
                 <div class="panel panel-danger">
                   <div class="panel-heading">
-                    <h3 class="panel-title">文章分类</h3>
+                    <h3 class="panel-title">文章标签</h3>
                   </div>
                   <div class="panel-body">
                       <p style="color:red">博主很懒，现在啥也没写</p>
@@ -165,7 +167,8 @@
                   </div>
                   <div class="panel-body">
                     {% for data_item in data_list %}
-                        <p><a href="">{{data_item.0}}({{data_item.1}})</a></p>
+                        <p><a href="/{{ username }}/data/{{ data_item.0|date:"Y-m" }}/">
+                            {{data_item.0}}({{data_item.1}})</a></p>
                     {% endfor %}
                   </div>
                 </div>
@@ -180,6 +183,7 @@
                 </div>
             {% endif %}
         </div>
+
         <div class="col-md-8">
             <!--开始实现我们获取用户含有的所有的文字实现展示出来即可-->
             <ul class="media-list">
@@ -188,7 +192,7 @@
                     <h4 class="media-heading"><a href="">{{ article_obj.title }}</a></h4>
                     <div class="media-left">
                       <a href="#">
-                        <img class="media-object" src="media/{{article_obj.blog.userinfo.avatar}}" width="100px" alt="...">
+                        <img class="media-object" src="/media/{{article_obj.blog.userinfo.avatar}}" width="100px" alt="...">
                       </a>
                     </div>
                     <div class="media-body">
