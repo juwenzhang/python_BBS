@@ -1,8 +1,108 @@
 {% extends 'Base.html' %}
 
+<!--开始实现书写我们的css的样式的书写-->
+{% block css %}
+<style>
+    #div_digg {
+        float: right;
+        margin-bottom: 10px;
+        margin-right: 30px;
+        font-size: 12px;
+        width: 125px;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .diggit {
+        float: left;
+        width: 46px;
+        height: 52px;
+        background: url("/static/images/upup.gif") no-repeat;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 2px;
+        padding-top: 5px;
+    }
+    .buryit {
+        float: right;
+        margin-left: 20px;
+        width: 46px;
+        height: 52px;
+        background: url("/static/images/downdown.gif") no-repeat;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 2px;
+        padding-top: 5px;
+    }
+    .diggnum {
+        font-size: 14px;
+        color: #075db3;
+        font-family: Verdana,serif;
+    }
+    #div_digg .burynum {
+        line-height: 1.5em !important;
+    }
+    .clear {
+        clear: both;
+    }
+    .diggword {
+        margin-top: 5px;
+        margin-left: 0;
+        font-size: 12px;
+        color: #808080;
+    }
+    #div_digg a.tip:link, #div_digg a.tip:visited, #div_digg a.tip:hover, #div_digg a.tip:active {
+        color: #075db3;
+        text-decoration: none;
+        border-bottom: none;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1 style="color:skyblue">{{article_obj.title}}</h1>
 <div class="article_content">
     {{ article_obj.content|safe }}
 </div>
+
+<!-- 开始实现书写我们的点赞点睬的页面的功能的书写 -->
+<div id="div_digg">
+    <div class="diggit action">
+        <span class="diggnum" id="digg_count">2</span>
+    </div>
+    <div class="buryit action">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">请先<a href="/login/">登录</a></div>
+    <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+{% endblock %}
+
+<!--开始实现我们的继承书写我们的js的代码-->
+{% block js %}
+<script>
+    // 开始实现我们的书写我们的js的代码来控制我们的网页的行为
+    $('.action').on('click', function(e) {
+        let is_up = $(this).hasClass('diggit');  // true false
+
+        // 开始实现向后端发送ajax请求
+        $.ajax({
+            url:"/up_or_down/",
+            method:"POST",
+            type:'post',
+            data:{
+                'article_id':'{{article_obj.pk}}',
+                'is_up':is_up
+            },
+            // 成功时候的响应函数
+            success:function(response){
+
+            },
+            // 失败时候的响应函数
+            error:function(response){
+
+            }
+        })
+    })
+</script>
 {% endblock %}

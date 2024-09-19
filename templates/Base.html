@@ -13,6 +13,10 @@
     {% if blog.site_theme %}
         <link rel="stylesheet" href="/media/CSS/{{blog.site_theme}}">
     {% endif %}
+
+    <!-- 开始实现我们的css区域的书写 -->
+    {% block css %}
+    {% endblock %}
 </head>
 
 <body>
@@ -125,5 +129,9 @@
         </div>
     </div>
 </div>
+
+<!--开始实现我们的添加我们的js的区域的模板语法-->
+{% block js %}
+{% endblock %}
 </body>
 </html>

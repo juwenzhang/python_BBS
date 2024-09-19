@@ -8,8 +8,9 @@ from app01.myforms.myforms import MyRegisterForm
 from django.contrib import auth
 # 这个就是来实现我们的判断是否处于登录状态的一个登录验证器
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, F
 from django.db.models.functions import TruncMonth
+import json
 
 
 # Create your views here.
@@ -218,3 +219,39 @@ def article_detail(request, username, article_id):
     if not article_obj:
         return render(request, "error.html", locals())
     return render(request, "article_detail.html", locals())
+
+
+# 开始书写我们的用来实现我们点赞点睬的后端视图函数
+def up_or_down(request):
+    back_info = {"code": 200, "message": ""}
+    if request.method == "POST":
+        # 判断是否处于登录
+        if request.user.is_authenticated:
+            article_id = request.POST.get("article_id")
+            is_up = json.loads(request.POST.get("is_up"))
+            # 判断当前文章是否是自己写的
+            article_obj = models.Article.objects.filter(pk=article_id).first()
+            if not article_obj.blog.userinfo == request.user:
+                # 判断用户是否存在连续点击
+                is_click = models.UpAndDown.objects.filter(user=request.user, article=article_obj)
+                if not is_click:
+                    # 操作数据库以及保存数据
+                    # 判断用户是点了赞还是点了踩
+                    if is_up:
+                        models.Article.objects.filter(pk=article_id).update(up_num=F("up_num") + 1)
+                        # 开始实现修改返回的描述信息
+                        back_info["code"] = 200
+                        back_info["message"] = "点赞成功..."
+                    else:
+                        models.Article.objects.filter(pk=article_id).update(down_num=F("down_num") + 1)
+                        back_info["code"] = 200
+                        back_info["message"] = "点睬成功..."
+                else:
+                    back_info["code"] = 400
+                    back_info["message"] = "已点赞，不可重复点赞..."
+            else:
+                back_info["code"] = 400
+                back_info["message"] = "是用户本人，用户本人不可给自己点赞..."
+        else:
+            back_info["code"] = 400
+            back_info["message"] = "用户还未登录，请登录后再来操作..."
