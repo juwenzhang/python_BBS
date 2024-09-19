@@ -5,7 +5,7 @@
                   </div>
                   <div class="panel-body">
                       {% for category_item in category_list %}
-                        <p><a href="/{{ request.user.username }}/category/{{ category_item.2 }}/">
+                        <p><a href="/{{ user_name }}/category/{{ category_item.2 }}/">
                             {{category_item.0}}({{category_item.1}})</a></p>
                       {% endfor %}
                   </div>
@@ -28,7 +28,7 @@
                   </div>
                   <div class="panel-body">
                      {% for tag_item in tag_list %}
-                        <p><a href="/{{ request.user.username }}/tag/{{ tag_item.2 }}/">
+                        <p><a href="/{{ user_name }}/tag/{{ tag_item.2 }}/">
                             {{tag_item.0}}({{tag_item.1}})</a></p>
                      {% endfor %}
                   </div>
@@ -51,7 +51,7 @@
                   </div>
                   <div class="panel-body">
                     {% for data_item in data_list %}
-                        <p><a href="/{{ request.user.username }}/data/{{ data_item.0|date:"Y-m" }}/">
+                        <p><a href="/{{ user_name }}/data/{{ data_item.0|date:"Y-m" }}/">
                             {{data_item.0}}({{data_item.1}})</a></p>
                     {% endfor %}
                   </div>

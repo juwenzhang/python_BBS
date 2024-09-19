@@ -14,6 +14,7 @@ def left_menu(username):
     user_obj = models.UserInfo.objects.filter(username=username).first()
     # 开始实现获取我们个人站点欣信息
     blog = user_obj.blog
+    user_name = user_obj.username
     # 开始实现使用我们的所需要的数据参数有哪些进行书写
     # 查询当前用户得分类以及分类下面得文章数目
     category_list = (models.Category.objects.filter(blog=blog).annotate(count_num=(Count('article__pk')))

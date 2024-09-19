@@ -214,6 +214,7 @@ def article_detail(request, username, article_id):
     # 这个就是我们的文章的详情页的视图函数
     article_obj = models.Article.objects.filter(pk=article_id).first()
     blog = article_obj.blog
+    user_name = username
     if not article_obj:
         return render(request, "error.html", locals())
     return render(request, "article_detail.html", locals())
