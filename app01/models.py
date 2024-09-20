@@ -83,4 +83,4 @@ class Comment(models.Model):
     content = models.TextField(verbose_name="评论内容")
     comment_time = models.DateTimeField(auto_now_add=True, verbose_name="评论时间")
     # 自关联字段
-    parent = models.ForeignKey(to="self", on_delete=models.CASCADE)
+    parent = models.ForeignKey(to="self", on_delete=models.CASCADE, null=True)

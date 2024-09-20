@@ -87,13 +87,31 @@
         <p><span class="glyphicon glyphicon-comment"></span> 发表评论</p>
         <div>
             <!--通过我们的文本域来实现我们的发表评论,同时禁止我们的拖动效果的实现-->
-            <textarea name="user_comment" id="user_comment" cols="30" rows="1" style="resize: none"></textarea><br>
-            <button class="btn btn-primary" id="user_submit">提交评论</button>
+            <textarea name="user_comment" id="user_comment" cols="30" rows="1" style="resize: none"></textarea>
+            <br>
+            <button class="btn btn-primary btn-sm" id="user_submit">提交评论</button>
         </div>
     </div>
 {% else %}
     <p>登陆后才可以查看并且发布评论，<a href="/login/">登录</a>或者 <a href="/home/">逛逛</a></p>
 {% endif %}
+
+<!--开始实现我们的展示评论的地方-->
+<div>
+    <ul class="list-group" id="comment_content">
+        {% for comment_item in comment_list %}
+            <li class="list-group-item">
+                <span># 第{{comment_item.pk}}楼</span>
+                <span>{{comment_item.comment_time|date:'Y-m-d h:i:s'}}</span>
+                <span>{{comment_item.user.username}}</span>
+                <span><a href="" class="pull-right">回复</a></span>
+                <div>
+                    {{comment_item.content}}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
 
 <!--开始实现我们的继承书写我们的js的代码-->
@@ -167,7 +185,21 @@
             },
             // 请求成功的时候的响应函数
             success:function(response){
-
+                if (response.code === 200){
+                    console.log(response)
+                    // 开始实现我们的临时实现基本的一些功能
+                    // 先实现我们的清空文本域的内容
+                    $('#user_comment').val()
+                    let username = '{{request.user.username}}'
+                    let temp = `
+                        <li class="list-group-item">
+                            <span>${username}</span>
+                            <span><a href="" class="pull-right">回复</a></span>
+                            <div>${content}</div>
+                        </li>
+                    `
+                    $('#comment_content').append(temp)
+                }
             },
             // 失败的时候的响应函数
             error:function(response){}

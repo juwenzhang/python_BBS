@@ -218,6 +218,8 @@ def article_detail(request, username, article_id):
     user_name = username
     if not article_obj:
         return render(request, "error.html", locals())
+    # 开始实现我们的获取得到当前文章的所有的详情内容
+    comment_list = models.Comment.objects.filter(article=article_obj).order_by("comment_time")
     return render(request, "article_detail.html", locals())
 
 
@@ -263,5 +265,28 @@ def up_or_down(request):
 
 # 开始实现我们的评论功能的实现
 def comment(request):
+    back_info = {"code": 200, "message": ""}
     if request.method == "POST":
-        back_info = {"code": 200, "message": ""}
+        # 开始实现判断我们的用户是否处于登录状态
+        if request.user.is_authenticated:
+            # 开始实现获取我们的前端的传入的数据
+            article_id = request.POST.get("article_id")
+            content = request.POST.get("content")
+            if content or content != "":
+                # 直接开始实现我们的操作数据库表的内容
+                # 文章表的评论数字段 +1
+                models.Article.objects.filter(pk=article_id).update(comment_num=F('comment_num') + 1)
+                # 然后实现操作我们的评论表来实现添加数据
+                models.Comment.objects.create(user=request.user, article_id=article_id, content=content)
+                # 开始实现修改我们的反汇编给前端的基本的内容
+                back_info["code"] = 200
+                back_info["message"] = "评论成功"
+            else:
+                back_info["code"] = 400
+                back_info["message"] = "评论内容不可为空..."
+        else:
+            # 开始实现我们的修改我们的评论的时候的一些你基本的那个失败后的内容
+            back_info["code"] = 400
+            back_info["message"] = "用户未登录，请<a href='/login/'>登陆</a>后再来评论"
+        return JsonResponse(back_info)
+    return JsonResponse(back_info)
