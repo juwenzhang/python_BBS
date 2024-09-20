@@ -67,40 +67,66 @@
 <!-- 开始实现书写我们的点赞点睬的页面的功能的书写 -->
 <div id="div_digg">
     <div class="diggit action">
-        <span class="diggnum" id="digg_count">2</span>
+        <span class="diggnum" id="digg_count">{{article_obj.up_num}}</span>
     </div>
     <div class="buryit action">
-        <span class="burynum" id="bury_count">0</span>
+        <span class="burynum" id="bury_count">{{article_obj.down_num}}</span>
     </div>
     <div class="clear"></div>
-    <div class="diggword" id="digg_tips">请先<a href="/login/">登录</a></div>
-    <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+    <div class="diggword" id="digg_tips"></div>
 </div>
 {% endblock %}
 
 <!--开始实现我们的继承书写我们的js的代码-->
 {% block js %}
 <script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
     // 开始实现我们的书写我们的js的代码来控制我们的网页的行为
     $('.action').on('click', function(e) {
+        const csrftoken = getCookie('csrftoken');
         let is_up = $(this).hasClass('diggit');  // true false
-
+        let click_div = $(this)
         // 开始实现向后端发送ajax请求
         $.ajax({
             url:"/up_or_down/",
             method:"POST",
-            type:'post',
+            type:'POST',
             data:{
                 'article_id':'{{article_obj.pk}}',
-                'is_up':is_up
+                'is_up':is_up,
+                'csrfmiddlewaretoken': csrftoken
             },
             // 成功时候的响应函数
             success:function(response){
-
+                console.log(response)  // 获取我们的最终的响应结果的数据以及报错错的描述信息
+                // 开始实现我们的对请求返回的数据的实现操作
+                if (response.code === 200){
+                    $('#digg_tips').html(response.message);
+                    // 获取当前点击的内部的文本标签的内容
+                    let oldNum = click_div.children().text()
+                    click_div.children().text(parseInt(oldNum) + 1)
+                }else if(response.code === 400){
+                    $('#digg_tips').html(response.message);
+                }else{
+                    $('#digg_tips').html(response.message);
+                }
             },
             // 失败时候的响应函数
             error:function(response){
-
+                console.error("网络出错，请检查网络后重试")
             }
         })
     })

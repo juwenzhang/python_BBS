@@ -94,7 +94,7 @@
                   <li><a href="#">修改头像</a></li>
                   <li><a href="#">后台管理</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="/logout/">退出登录</a></li>
+                  <li><a href="/logout/">退出登录 <span class="glyphicon glyphicon-log-out"></span></a></li>
               </ul>
           </li>
         {% endif %}
@@ -139,7 +139,11 @@
             <ul class="media-list">
             {% for article_obj in article_queryset %}
                   <li class="media">
-                    <h4 class="media-heading"><a href="/{{request.user.username}}/article/{{article_obj.pk}}/">{{ article_obj.title }}</a></h4>
+                    {% if request.user.username %}
+                        <h4 class="media-heading"><a href="/{{request.user.username}}/article/{{article_obj.pk}}/">{{ article_obj.title }}</a></h4>
+                    {% else %}
+                        <h4 class="media-heading"><a href="/{{article_obj.blog.userinfo.username}}/article/{{article_obj.pk}}/">{{ article_obj.title }}</a></h4>
+                    {% endif %}
                     <div class="media-left">
                       <a href="#">
                         <img class="media-object" src="media/{{article_obj.blog.userinfo.avatar}}" width="100px" alt="...">

@@ -246,6 +246,8 @@ def up_or_down(request):
                         models.Article.objects.filter(pk=article_id).update(down_num=F("down_num") + 1)
                         back_info["code"] = 200
                         back_info["message"] = "点睬成功..."
+                    # 开始实现我们的给我们的一些点菜点赞表实现操作
+                    models.UpAndDown.objects.filter(user=request.user, article=article_obj, is_up=is_up)
                 else:
                     back_info["code"] = 400
                     back_info["message"] = "已点赞，不可重复点赞..."
@@ -253,5 +255,6 @@ def up_or_down(request):
                 back_info["code"] = 400
                 back_info["message"] = "是用户本人，用户本人不可给自己点赞..."
         else:
-            back_info["code"] = 400
-            back_info["message"] = "用户还未登录，请登录后再来操作..."
+            back_info["code"] = 401
+            back_info["message"] = "用户还未<a href='/login/'>登录</a>，请登录后再来操作..."
+    return JsonResponse(back_info)

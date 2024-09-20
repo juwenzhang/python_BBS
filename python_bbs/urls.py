@@ -35,7 +35,7 @@ urlpatterns = [
     # 开始实现我们的退出登录功能的实现
     path('logout/', views.logout),
     # 开始实现书写我们的点赞点彩的路由路径
-    path('up_or_down', views.up_or_down),
+    path('up_or_down/', views.up_or_down),
     # 开始实现我们的个人的姓名的实现书写
     re_path(r'^(?P<username>\w+)/$', views.user_site),
     # 开始我们的文章详情页
