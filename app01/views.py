@@ -248,6 +248,7 @@ def up_or_down(request):
                         back_info["message"] = "点睬成功..."
                     # 开始实现我们的给我们的一些点菜点赞表实现操作
                     models.UpAndDown.objects.filter(user=request.user, article=article_obj, is_up=is_up)
+                # 存在逻辑问题哟
                 else:
                     back_info["code"] = 400
                     back_info["message"] = "已点赞，不可重复点赞..."
