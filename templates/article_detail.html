@@ -65,16 +65,35 @@
 </div>
 
 <!-- 开始实现书写我们的点赞点睬的页面的功能的书写 -->
-<div id="div_digg">
-    <div class="diggit action">
-        <span class="diggnum" id="digg_count">{{article_obj.up_num}}</span>
-    </div>
-    <div class="buryit action">
-        <span class="burynum" id="bury_count">{{article_obj.down_num}}</span>
-    </div>
-    <div class="clear"></div>
+<!--实现我们的清除浮动带来的塌陷带来的问题-->
+<div class="clearfix">
+    <div id="div_digg">
+        <div class="diggit action">
+            <span class="diggnum" id="digg_count">{{article_obj.up_num}}</span>
+        </div>
+        <div class="buryit action">
+            <span class="burynum" id="bury_count">{{article_obj.down_num}}</span>
+        </div>
+        <div class="clear"></div>
     <div class="diggword" id="digg_tips"></div>
 </div>
+</div>
+
+<!--开始实现我们的评论得分功能的实现-->
+<!--评论功能在实现的时候，我们首先需要实现的是我们的一级评论，然后就是我们的二级评论-->
+<!--我们只有处于登录状态下才可以实现我们的发布评论-->
+{% if request.user.is_authenticated %}
+    <div>
+        <p><span class="glyphicon glyphicon-comment"></span> 发表评论</p>
+        <div>
+            <!--通过我们的文本域来实现我们的发表评论,同时禁止我们的拖动效果的实现-->
+            <textarea name="user_comment" id="user_comment" cols="30" rows="1" style="resize: none"></textarea><br>
+            <button class="btn btn-primary" id="user_submit">提交评论</button>
+        </div>
+    </div>
+{% else %}
+    <p>登陆后才可以查看并且发布评论，<a href="/login/">登录</a>或者 <a href="/home/">逛逛</a></p>
+{% endif %}
 {% endblock %}
 
 <!--开始实现我们的继承书写我们的js的代码-->
@@ -128,6 +147,30 @@
             error:function(response){
                 console.error("网络出错，请检查网络后重试")
             }
+        })
+    })
+
+    // 开始实现我们的点击发布评论之后的处理函数
+    $('#user_submit').on('click', function(e) {
+        // 首先先获取得到我们的csrftoken验证
+        const csrftoken = getCookie('csrftoken');
+        const content = $('#user_comment').val();
+        $.ajax({
+            url:"/comment/",
+            method:"POST",
+            type:'POST',
+            // 开始配置我们的ajax的时候的提交数据
+            data:{
+                'article_id':'{{article_obj.pk}}',
+                'content':content,
+                'csrfmiddlewaretoken': csrftoken
+            },
+            // 请求成功的时候的响应函数
+            success:function(response){
+
+            },
+            // 失败的时候的响应函数
+            error:function(response){}
         })
     })
 </script>

@@ -259,3 +259,9 @@ def up_or_down(request):
             back_info["code"] = 401
             back_info["message"] = "用户还未<a href='/login/'>登录</a>，请登录后再来操作..."
     return JsonResponse(back_info)
+
+
+# 开始实现我们的评论功能的实现
+def comment(request):
+    if request.method == "POST":
+        back_info = {"code": 200, "message": ""}
