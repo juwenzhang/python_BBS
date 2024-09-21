@@ -272,12 +272,13 @@ def comment(request):
             # 开始实现获取我们的前端的传入的数据
             article_id = request.POST.get("article_id")
             content = request.POST.get("content")
+            parentId = request.POST.get("parentId")
             if content or content != "":
                 # 直接开始实现我们的操作数据库表的内容
                 # 文章表的评论数字段 +1
                 models.Article.objects.filter(pk=article_id).update(comment_num=F('comment_num') + 1)
                 # 然后实现操作我们的评论表来实现添加数据
-                models.Comment.objects.create(user=request.user, article_id=article_id, content=content)
+                models.Comment.objects.create(user=request.user, article_id=article_id, content=content, parent_id=parentId)
                 # 开始实现修改我们的反汇编给前端的基本的内容
                 back_info["code"] = 200
                 back_info["message"] = "评论成功"

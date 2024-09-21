@@ -104,7 +104,9 @@
                 <span># 第{{comment_item.pk}}楼</span>
                 <span>{{comment_item.comment_time|date:'Y-m-d h:i:s'}}</span>
                 <span>{{comment_item.user.username}}</span>
-                <span><a href="" class="pull-right">回复</a></span>
+                <span><a class="pull-right reply"
+                         username="{{comment_item.user.username}}"
+                         commit_id="{{comment_item.pk}}">回复</a></span>
                 <div>
                     {{comment_item.content}}
                 </div>
@@ -117,6 +119,8 @@
 <!--开始实现我们的继承书写我们的js的代码-->
 {% block js %}
 <script>
+    // 开始实现设置一个全局的 parentId 字段
+    let parentId = null
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -181,6 +185,7 @@
             data:{
                 'article_id':'{{article_obj.pk}}',
                 'content':content,
+                'parentId':parentId,
                 'csrfmiddlewaretoken': csrftoken
             },
             // 请求成功的时候的响应函数
@@ -199,11 +204,23 @@
                         </li>
                     `
                     $('#comment_content').append(temp)
+                    parentId = null;
                 }
             },
             // 失败的时候的响应函数
             error:function(response){}
         })
+    })
+
+    // 开始实现我们的多级评论
+    $('.reply').on('click', function(e) {
+        // 开始实现我们的获取评论人的姓名和主键
+        const csrftoken = getCookie('csrftoken')
+        const comment_user = $(this).attr('username')
+        const commit_id = $(this).attr('commit_id')
+        parentId = $(this).attr('commit_id')
+        // 开始实现我们的聚焦,然后实现聚焦
+        $('#user_comment').val('@' + comment_user + '\n').focus()
     })
 </script>
 {% endblock %}
