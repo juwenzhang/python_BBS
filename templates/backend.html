@@ -137,15 +137,31 @@
                 <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">文章</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">评论</a></li>
                 <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">分类</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">设置</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">标签</a></li>
               </ul>
 
               <!-- Tab panes -->
               <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">文章页面</div>
-                <div role="tabpanel" class="tab-pane" id="profile">评论页面</div>
-                <div role="tabpanel" class="tab-pane" id="messages">分类页面</div>
-                <div role="tabpanel" class="tab-pane" id="settings">设置页面</div>
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <!--开始实现使用我们的模板继承来实现书写我们的文章页面-->
+                    {% block article %}
+                    {% endblock %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <!--开始实现我们的使用评论情区域-->
+                    {% block comment %}
+                    {% endblock %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="messages">
+                    <!--开始实现我们的分类的内容的书写-->
+                    {% block category %}
+                    {% endblock %}
+                </div>
+                <div role="tabpanel" class="tab-pane" id="settings">
+                    <!--开始实现我们的对标签的实现书写-->
+                    {% block tags %}
+                    {% endblock %}
+                </div>
               </div>
             </div>
         </div>

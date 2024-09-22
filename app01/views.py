@@ -296,5 +296,10 @@ def comment(request):
 # 开始实现书写后台管理的后端视图函数
 def backend(request):
     # 首先我们得页面的实现的
-    # 直接实现返回一个后台管理的页面
-    return render(request, 'backend.html', locals())
+    # 开始实现获取我们的当前用户书写的文章
+    user_obj = models.UserInfo.objects.filter(username=request.user.username).first()
+    bldg_obj = user_obj.blog
+    article_list = models.Article.objects.filter(blog=bldg_obj)
+    comment_list = models.Comment.objects.filter(user=request.user)
+    # 直接实现返回一个后台管理需要数据的页面
+    return render(request, 'backendContent.html', locals())

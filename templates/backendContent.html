@@ -1,0 +1,70 @@
+<!--开始实现我们的继承页面-->
+{% extends 'backend.html' %}
+
+
+<!--文章显示的分类-->
+{% block article %}
+<!--开始实现我们的循环遍历我们的文章列表-->
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>评论数</th>
+            <th>点赞数</th>
+            <th>操作</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for article_item in article_list %}
+            <tr>
+                <td>{{article_item.title}}</td>
+                <td>{{article_item.create_time|date:'Y-m-d'}}</td>
+                <td>{{article_item.comment_num}}</td>
+                <td>{{article_item.up_num}}</td>
+                <td><a href="">编辑</a></td>
+                <td><a href="">删除</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+<!--评论区域的模板继承的书写-->
+{% block comment %}
+    <!--开始实现我们的评论区域的渲染页面-->
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>评论内容</th>
+                    <th>评论文章</th>
+                    <th>评论时间</th>
+                    <th>操作</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment_item in comment_list %}
+                    <tr>
+                        <td>{{comment_item.comment}}</td>
+                        <td><a href="">{{comment_item.article.title}}</a></td>
+                        <td>{{comment_item.comment_time|date:'Y-m-d'}}</td>
+                        <td><a href="">编辑</a></td>
+                        <td><a href="">删除</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
+
+
+<!--文章分类的实现-->
+{% block category %}
+{% endblock %}
+
+
+<!--文章标签的实现书写-->
+{% block tags %}
+{% endblock %}
