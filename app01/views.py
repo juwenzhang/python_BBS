@@ -303,3 +303,16 @@ def backend(request):
     comment_list = models.Comment.objects.filter(user=request.user)
     # 直接实现返回一个后台管理需要数据的页面
     return render(request, 'backendContent.html', locals())
+
+
+# 开始实现我们的书写我们的添加文章的视图函数
+@login_required
+def add_article(request):
+    user_obj = models.UserInfo.objects.filter(username=request.user.username).first()
+    blog = user_obj.blog
+    # 开始实现我们的通过这个人来实现我们的当前的用户所有的信息
+    category_list = models.Category.objects.filter(blog=blog)
+    # 标签信息
+    tag_list = models.Tag.objects.filter(blog=blog)
+
+    return render(request, 'add_article.html', locals())

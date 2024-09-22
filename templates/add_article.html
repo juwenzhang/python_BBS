@@ -1,0 +1,88 @@
+<!-- 开始实现我们的模板的继承来实现重写右边的部分即可 -->
+{% extends 'backend.html' %}
+
+<!-- 开始实现重写我们的右边的部分的内容即可 -->
+{% block right %}
+<!--开始我们的重写-->
+    <h3 class="text-center">添加文章</h3>
+    {% csrf_token %}
+    <p>标题</p>
+    <input type="text" name="title" class="form-control" placeholder="请输入标题名">
+    <br>
+    {% if category_list %}
+        <p>分类</p>
+        {% for category_item in category_list %}
+            <!--直接通过我们的单选框来实现-->
+            <input type="radio" name="category"
+                   id="category_item" value="{{ category_item.name }}" checked>
+        {% endfor %}
+    {% else %}
+        <p>分类</p>
+        <input type="text" name="category" value="" placeholder="请输入分类名" class="form-control">
+    {% endif %}
+    <br><br>
+
+    {% if tag_list %}
+        <p>标签</p>
+        {% for tag_item in tag_list %}
+            <input type="checkbox" name="tag" id="tag_item" value="{{ tag_item.name }}" checked>
+        {% endfor %}
+    {% else %}
+        <p>标签</p>
+        <input type="text" name="tag" value="" placeholder="请输入标签名" class="form-control">
+    {% endif %}
+    <br><br>
+
+    <p>文章内容</p>
+    <!--富文本编辑器 首先我们这里实现使用的富文本编译器WangEditor https://www.wangeditor.com/
+        或者说我们直接使用 KindEditor 的富文本编辑器
+    -->
+    <div id="editor—wrapper">
+        <div id="toolbar-container"><!-- 工具栏 --></div>
+        <div id="editor-container"><!-- 编辑器 --></div>
+    </div>
+    <br><br>
+
+    <input type="submit" value="提交" class="btn btn-success pull-right form-control" id="btn_input">
+{% endblock %}
+
+{% block js %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    // 开始通过我们的ajax来实现我们的前后端交互
+    $('#btn_input').on('click', function(e) {
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: '/add_article/',
+            type: 'POST',
+            method: 'POST',
+            data: {
+                'title': $('#title').val(),
+                'category': $('#category_item').val(),
+                'tag': $('#tag_item').val(),
+                'content': $('#editor-container').val(),
+                'csrfmiddlewaretoken': csrftoken
+            },
+            success:function(response){
+
+            },
+            error:function(response){
+
+            }
+        })
+    })
+</script>
+{% endblock %}
