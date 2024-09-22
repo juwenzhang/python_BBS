@@ -38,6 +38,8 @@ urlpatterns = [
     path('up_or_down/', views.up_or_down),
     # 评论的功能的实现
     path('comment/', views.comment),
+    # 后台管理
+    path('backend/', views.backend),
     # 开始实现我们的个人的姓名的实现书写
     re_path(r'^(?P<username>\w+)/$', views.user_site),
     # 开始我们的文章详情页

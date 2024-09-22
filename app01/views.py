@@ -291,3 +291,10 @@ def comment(request):
             back_info["message"] = "用户未登录，请<a href='/login/'>登陆</a>后再来评论"
         return JsonResponse(back_info)
     return JsonResponse(back_info)
+
+
+# 开始实现书写后台管理的后端视图函数
+def backend(request):
+    # 首先我们得页面的实现的
+    # 直接实现返回一个后台管理的页面
+    return render(request, 'backend.html', locals())
