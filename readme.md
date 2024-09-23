@@ -155,8 +155,8 @@ gitk 查看自己的提交信息
 elementPlus  https://element-plus.org/zh-CN/
 ant-design  https://ant-design.antgroup.com/index-cn?utm_source=xunbaodui  
 bootstrap  https://www.bootcss.com/
-dataV  http://datav.jiaminghi.com/
-echart https://echarts.apache.org/zh/index.html
+dataV  https://datav.jiaminghi.com/
+echarts https://echarts.apache.org/zh/index.html
 
 推荐使用的前端开发框架
 vue2/3  https://cn.vuejs.org/
