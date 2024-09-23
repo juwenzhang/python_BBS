@@ -42,6 +42,8 @@ urlpatterns = [
     path('backend/', views.backend),
     # 开始实现我们的添加文章
     path('add_article/', views.add_article),
+    # 开始实现书写我们的文章编辑的页面
+    re_path('article/edit/(?P<edit_id>\d+)', views.article_edit, name='article_edit'),
     # 开始实现我们的个人的姓名的实现书写
     re_path(r'^(?P<username>\w+)/$', views.user_site),
     # 开始我们的文章详情页

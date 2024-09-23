@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, F
 from django.db.models.functions import TruncMonth
 import json
+from bs4 import BeautifulSoup
 
 
 # Create your views here.
@@ -322,9 +323,15 @@ def add_article(request):
         tag = request.POST.getlist("tag")
         content = request.POST.get("content")
         # 同时实现设置我们的文章简介
+
+        # 开始实现使用我们的beautifulsoup
+        soup = BeautifulSoup(content, "html.parser")
+        tags = soup.find_all('script')
+        for tag in tags:
+            tag.decompose()  # 直接将我们的script标签实现删除
         desc = ''
         if content:
-            desc = content[0:50]
+            desc = soup.text[0: 50]
         # 直接实现操作文章表来实现添加文章数据
         article_obj = models.Article.objects.create(title=title,
                                                     category_id=category_id,
@@ -337,3 +344,27 @@ def add_article(request):
         back_info["url"] = "/backend/"
         return JsonResponse(back_info)
     return render(request, 'add_article.html', locals())
+
+
+'''
+XSS 攻击
+就是为了实现防止我们的出现一个死循环，然后阻止我们的页面的正常加载
+所以说，这个漏洞是需要实现避免的
+所以说我们的用户书写script标签的时候，我们就要去处理这个问题
+
+这个时候，我们就需要使用到我们的 beautifulsoup 来实现我们的阻止这样的行为
+'''
+
+
+# 开始实现书写我们的文章编辑的页面
+@login_required
+def article_edit(request, edit_id):
+    back_info = {"code": 200, "message": ""}
+    # 开始实现获取得到我们需要实现修改的文章对象
+    article_obj = models.Article.objects.filter(pk=edit_id).first()
+    print(article_obj)
+    if not article_obj:
+        # 如果直接通过我们的后端的重定向来实现页面的跳转，那么就可以直接重定向即可
+        # 通过的是我们的ajax来实现的，那么就可以直接返回信息添加一个 url 字段即可
+        return render(request, 'error.html')
+    return render(request, 'article_edit.html', locals())
