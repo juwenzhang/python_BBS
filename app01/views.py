@@ -214,10 +214,10 @@ def user_site(request, username, **kwargs):
 def article_detail(request, username, article_id):
     # 这个就是我们的文章的详情页的视图函数
     article_obj = models.Article.objects.filter(pk=article_id).first()
-    blog = article_obj.blog
     user_name = username
     if not article_obj:
         return render(request, "error.html", locals())
+    blog = article_obj.blog
     # 开始实现我们的获取得到当前文章的所有的详情内容
     comment_list = models.Comment.objects.filter(article=article_obj).order_by("comment_time")
     return render(request, "article_detail.html", locals())
@@ -233,7 +233,7 @@ def up_or_down(request):
             is_up = json.loads(request.POST.get("is_up"))
             # 判断当前文章是否是自己写的
             article_obj = models.Article.objects.filter(pk=article_id).first()
-            if not article_obj.blog.userinfo == request.user:
+            if not article_obj == request.user:
                 # 判断用户是否存在连续点击
                 is_click = models.UpAndDown.objects.filter(user=request.user, article=article_obj)
                 if not is_click:
@@ -308,11 +308,32 @@ def backend(request):
 # 开始实现我们的书写我们的添加文章的视图函数
 @login_required
 def add_article(request):
+    back_info = {"code": 200, "message": ""}
     user_obj = models.UserInfo.objects.filter(username=request.user.username).first()
     blog = user_obj.blog
     # 开始实现我们的通过这个人来实现我们的当前的用户所有的信息
     category_list = models.Category.objects.filter(blog=blog)
     # 标签信息
     tag_list = models.Tag.objects.filter(blog=blog)
-
+    # 开始实现后端获取我们前端的数据
+    if request.method == "POST":
+        title = request.POST.get("title")
+        category_id = request.POST.get("category")
+        tag = request.POST.getlist("tag")
+        content = request.POST.get("content")
+        # 同时实现设置我们的文章简介
+        desc = ''
+        if content:
+            desc = content[0:50]
+        # 直接实现操作文章表来实现添加文章数据
+        article_obj = models.Article.objects.create(title=title,
+                                                    category_id=category_id,
+                                                    content=content,
+                                                    desc=desc,
+                                                    blog=blog)
+        article_obj.tags.add(*tag_list)
+        # 开始实现修改我们的修改描述信息
+        back_info["message"] = "文章创建成功"
+        back_info["url"] = "/backend/"
+        return JsonResponse(back_info)
     return render(request, 'add_article.html', locals())

@@ -166,7 +166,7 @@
                 }
             },
             // 失败时候的响应函数
-            error:function(response){
+            error:function(){
                 console.error("网络出错，请检查网络后重试")
             }
         })
@@ -194,7 +194,7 @@
                     console.log(response)
                     // 开始实现我们的临时实现基本的一些功能
                     // 先实现我们的清空文本域的内容
-                    $('#user_comment').val()
+                    $('#user_comment').val('')
                     let username = '{{request.user.username}}'
                     let temp = `
                         <li class="list-group-item">

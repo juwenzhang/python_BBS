@@ -20,7 +20,7 @@
     <tbody>
         {% for article_item in article_list %}
             <tr>
-                <td>{{article_item.title}}</td>
+                <td><a href="/{{request.user.username}}/article/{{article_item.pk}}">{{article_item.title}}</a></td>
                 <td>{{article_item.create_time|date:'Y-m-d'}}</td>
                 <td>{{article_item.comment_num}}</td>
                 <td>{{article_item.up_num}}</td>
