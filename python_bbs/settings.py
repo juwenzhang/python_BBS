@@ -78,7 +78,7 @@ DATABASES = {
         'NAME': 'django_bbs',
         'USER': 'root',
         'PASSWORD': '451674',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',  # 确保使用严格模式
