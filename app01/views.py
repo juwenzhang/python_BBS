@@ -21,6 +21,9 @@ from bs4 import BeautifulSoup
 #     with connection.cursor() as cursor:
 #         cursor.execute("SET time_zone = 'UTC'")
 
+def redirect_page(request):
+    return redirect("/home/")
+
 # 实现注册的视图函数
 def Register(request):
     # 通过我们的返回的code的值给前端进行判断即可

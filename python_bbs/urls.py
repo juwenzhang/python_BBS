@@ -21,6 +21,7 @@ from python_bbs import settings
 from django.views.static import serve
 
 urlpatterns = [
+    path("", views.redirect_page),
     path('admin/', admin.site.urls),
     #  实现注册功能
     path('register/', views.Register),
