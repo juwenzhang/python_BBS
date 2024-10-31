@@ -30,6 +30,35 @@
         {% endfor %}
     </tbody>
 </table>
+
+<!-- backendContent.html -->
+{% for article in article_list %}
+    <div>
+        <!-- 显示文章信息 -->
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.content }}</p>
+        <!-- 其他文章信息 -->
+    </div>
+{% endfor %}
+
+<!-- 分页导航 -->
+<div>
+    <span class="step-links">
+        {% if article_list.has_previous %}
+            <a href="?page=1">&laquo; 第一页</a>
+            <a href="?page={{ article_list.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            页码 {{ article_list.number }} of {{ article_list.paginator.num_pages }}.
+        </span>
+
+        {% if article_list.has_next %}
+            <a href="?page={{ article_list.next_page_number }}">下一页</a>
+            <a href="?page={{ article_list.paginator.num_pages }}">最后一页 &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
 
 <!--评论区域的模板继承的书写-->

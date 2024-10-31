@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from django.shortcuts import render, HttpResponse, redirect
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
@@ -302,11 +303,24 @@ def backend(request):
     # 首先我们得页面的实现的
     # 开始实现获取我们的当前用户书写的文章
     user_obj = models.UserInfo.objects.filter(username=request.user.username).first()
-    bldg_obj = user_obj.blog
-    article_list = models.Article.objects.filter(blog=bldg_obj)
-    comment_list = models.Comment.objects.filter(user=request.user)
-    # 直接实现返回一个后台管理需要数据的页面
-    return render(request, 'backendContent.html', locals())
+    if user_obj:
+        bldg_obj = user_obj.blog
+        article_list = models.Article.objects.filter(blog=bldg_obj)
+        comment_list = models.Comment.objects.filter(user=request.user)
+        # 直接实现返回一个后台管理需要数据的页面
+        paginator = Paginator(article_list, 10)  # 假设每页显示10篇文章
+        page_number = request.GET.get('page')
+        if page_number:
+            page_obj = paginator.get_page(page_number)
+            context = {
+                'article_list': page_obj,
+                'comment_list': comment_list,
+            }
+            return render(request, 'backendContent.html', context)
+        else:
+            return render(request, "error.html")
+    else:
+        return render(request, "error.html", locals())
 
 
 # 开始实现我们的书写我们的添加文章的视图函数
